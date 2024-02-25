@@ -8,7 +8,7 @@ const options = {
   },
 };
 
-const apiData = async (url) => {
+export const apiData = async (url) => {
   try {
     const response = await fetch(`${BASE_URL}/${url}`, options);
     const result = await response.json();
