@@ -8,6 +8,7 @@ import NavItems from "./NavItems";
 import Title from "./Title";
 
 const Navbar = () => {
+  const [isActive, setIsActive] = useState("LIVE");
   return (
     <div className=" cb-nav w-full flex flex-col fixed top-0 ">
       <Title />
@@ -24,7 +25,11 @@ const Navbar = () => {
           <BsThreeDotsVertical size={"25px"} className="cursor-pointer" />
         </div>
       </div>
-      <NavItems navTags={navTags} />
+      <NavItems
+        navTags={navTags}
+        setIsActive={setIsActive}
+        isActive={isActive}
+      />
       <Header />
     </div>
   );

@@ -1,8 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { apiData } from "../utils/apiData";
 
-const NavItems = ({ navTags }) => {
-  const [isActive, setIsActive] = useState("LIVE");
-
+const NavItems = ({ navTags, setIsActive, isActive }) => {
   const handleClick = (data) => {
     setIsActive(data);
   };
