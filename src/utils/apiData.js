@@ -11,8 +11,13 @@ const options = {
 export const apiData = async (url) => {
   try {
     const response = await fetch(`${BASE_URL}/${url}`, options);
-    const result = await response.json();
-    return result;
+    const contentType = response.headers.get("content-type");
+    if (contentType && contentType.startsWith("image/")) {
+      return response; // return the image response directly
+    } else {
+      const result = await response.json();
+      return result; // return JSON response
+    }
   } catch (error) {
     console.error(error);
   }

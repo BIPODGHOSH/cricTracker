@@ -1,7 +1,54 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { apiData } from "../../utils/apiData";
 
 const HomeMatchCard = ({ matches }) => {
   const { seriesMatches } = matches;
+  const [teamImages, setTeamImages] = useState({});
+
+  useEffect(() => {
+    const fetchTeamImages = async (teamIds) => {
+      // console.log(teamIds);
+      const images = {};
+      for (const teamId of teamIds) {
+        // console.log(teamId);
+        try {
+          const imageData = await apiData(`img/v1/i1/c${teamId}/i.jpg`);
+          // console.log("Image Data for Team ID", teamId, ":", imageData);
+          images[teamId] = imageData.url;
+        } catch (error) {
+          console.error(`Error fetching image for teamId ${teamId}`, error);
+        }
+      }
+      // console.log("Fetched Team Images:", images);
+      setTeamImages(images);
+    };
+
+    const teamIds = seriesMatches
+      .filter((data) => data.seriesAdWrapper)
+      .flatMap((data) => {
+        const matches = data.seriesAdWrapper.matches || [];
+        return matches.flatMap((match) => [
+          match?.matchInfo?.team1?.imageId,
+          match?.matchInfo?.team2?.imageId,
+        ]);
+      })
+      .filter((imageId) => imageId !== undefined);
+
+    // const teamIds = seriesMatches
+    //   .flatMap((data) => [
+    //     data?.seriesAdWrapper?.matches[0].matchInfo?.team1?.imageId,
+    //     data?.seriesAdWrapper?.matches[0].matchInfo?.team2?.imageId,
+    //   ])
+    //   .filter((imageId) => imageId !== undefined);
+
+    // console.log("Extracted Team Ids:", teamIds);
+
+    if (teamIds.length > 0) {
+      fetchTeamImages(teamIds);
+    }
+
+    fetchTeamImages(teamIds);
+  }, [seriesMatches]);
   console.log(seriesMatches);
   return (
     <>
@@ -13,19 +60,27 @@ const HomeMatchCard = ({ matches }) => {
           <div className="px-3">
             {data.seriesAdWrapper?.matches?.map((match, i) => (
               <div className=" border-b-2 pr-10 md:pr-20" key={i}>
-                {console.log(match)}
+                {/* {console.log(match)} */}
                 <h5 className="">
                   {match.matchInfo?.matchDesc} .{" "}
                   {match.matchInfo?.venueInfo?.city}
                 </h5>
                 <div className="flex justify-between items-center">
                   <div className="flex flex-col">
-                    <div className="">
-                      <img src="" alt="" />
+                    <div className="flex gap-3 items-center">
+                      <img
+                        src={teamImages[match.matchInfo?.team1.imageId]}
+                        className=" h-5 w-5"
+                        alt={`${match.matchInfo?.team1.teamName} Logo`}
+                      />
                       <h3 className="">{match.matchInfo?.team1.teamName}</h3>
                     </div>
-                    <div className="">
-                      <img src="" alt="" />
+                    <div className="flex gap-3 items-center">
+                      <img
+                        src={teamImages[match.matchInfo?.team2?.imageId]}
+                        className=" h-5 w-5"
+                        alt={`${match.matchInfo?.team2.teamName} Logo`}
+                      />
                       <h3 className="">{match.matchInfo?.team2.teamName}</h3>
                     </div>
                   </div>
