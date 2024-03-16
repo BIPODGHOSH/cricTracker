@@ -16,6 +16,7 @@ export const apiData = async (url) => {
       return response; // return the image response directly
     } else {
       const result = await response.json();
+      console.log(result);
       return result; // return JSON response
     }
   } catch (error) {

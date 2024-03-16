@@ -12,8 +12,8 @@ const Home = () => {
 
   useEffect(() => {
     apiData(`matches/v1/${isActive.toLowerCase()}`).then((data) => {
-      // console.log(data);
-      setMatches(data.typeMatches);
+      console.log(data);
+      setMatches(data?.typeMatches);
     });
   }, [isActive]);
   const handleClick = (data) => {
@@ -21,10 +21,10 @@ const Home = () => {
   };
 
   return (
-    <div className="flex flex-col h-full w-full bg-slate-300 relative">
+    <div className="flex flex-col h-screen w-full bg-slate-300 relative ">
       <div className="cb-nav px-4 flex flex-col top-0 w-full relative">
         <Title />
-        <h1 className="pl-5 mt-3 text-white text-2xl font-bold">
+        <h1 className="pl-2 md:pl-5 mt-3 text-white text-sm md:text-2xl font-bold">
           Current Matches
         </h1>
         <div className="flex mt-2">
