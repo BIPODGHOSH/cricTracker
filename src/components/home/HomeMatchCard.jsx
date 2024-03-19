@@ -8,20 +8,21 @@ const HomeMatchCard = ({ matches }) => {
 
   useEffect(() => {
     const fetchTeamImages = async (teamIds) => {
-      // console.log(teamIds);
-      const images = {};
-      for (const teamId of teamIds) {
-        // console.log(teamId);
-        try {
-          const imageData = await apiData(`img/v1/i1/c${teamId}/i.jpg`);
-          // console.log("Image Data for Team ID", teamId, ":", imageData);
-          images[teamId] = imageData.url;
-        } catch (error) {
-          console.error(`Error fetching image for teamId ${teamId}`, error);
+      try {
+        const newTeamImages = {};
+        for (const teamId of teamIds) {
+          if (!teamImages[teamId]) {
+            const imageData = await apiData(`img/v1/i1/c${teamId}/i.jpg`);
+            newTeamImages[teamId] = imageData.url;
+          }
         }
+        setTeamImages((prevTeamImages) => ({
+          ...prevTeamImages,
+          ...newTeamImages,
+        }));
+      } catch (error) {
+        console.error("Error fetching team images:", error);
       }
-      // console.log("Fetched Team Images:", images);
-      setTeamImages(images);
     };
 
     const teamIds = seriesMatches
@@ -38,8 +39,6 @@ const HomeMatchCard = ({ matches }) => {
     if (teamIds.length > 0) {
       fetchTeamImages(teamIds);
     }
-
-    fetchTeamImages(teamIds);
   }, [seriesMatches]);
   console.log(seriesMatches);
   return (
@@ -84,7 +83,7 @@ const HomeMatchCard = ({ matches }) => {
                         <div className="flex">
                           <div className="flex">
                             <h4 className="">
-                              {match.matchScore?.team1Score?.inngs1?.runs}
+                              {match.matchScore?.team1Score?.inngs1.runs}
                             </h4>
                             {match.matchScore?.team1Score?.inngs1?.wickets !==
                               10 && (

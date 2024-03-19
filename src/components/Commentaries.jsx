@@ -22,7 +22,7 @@ const Commentaries = ({ comm }) => {
   };
 
   return (
-    <div className="p-5 pt-3 w-full mt-24 md:mt-36">
+    <div className="p-5 pt-3 w-full mt-5">
       {commentaryList &&
         commentaryList.map((com, i) => (
           <div className="flex  w-full pl-4 items-center mt-5 " key={i}>
